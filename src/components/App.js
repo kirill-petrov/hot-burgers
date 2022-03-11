@@ -2,6 +2,7 @@ import React from 'react';
 import Header from './Header';
 import Order from './Order';
 import MenuAdmin from './MenuAdmin';
+import Burger from './Burger';
 import sampleBurgers from '../sample-burgers';
 
 class App extends React.Component {
@@ -20,7 +21,6 @@ class App extends React.Component {
   }
 
   loadSampleBurgers = () => {
-    console.log(sampleBurgers);
     this.setState({ burgers: sampleBurgers })
   }
 
@@ -29,6 +29,19 @@ class App extends React.Component {
       <div className="burger-paradise">
         <div className="menu">
           <Header title='Hot Burgers' />
+          <ul className='burgers'>
+            {
+              Object.keys(this.state.burgers).map(key => {
+                return (
+                  <Burger
+                    key={key}
+                    index={key}
+                    details={this.state.burgers[key]}
+                  />
+                )
+              })
+            }
+          </ul>
         </div>
         <Order />
         <MenuAdmin
