@@ -15,7 +15,9 @@ class Landing extends React.Component {
   }
 
   goRestourant = () => {
-    console.log('go');
+    const { url } = this.state;
+    const { history } = this.props;
+    history.push(`/restourant/${url}`);
   }
 
   render() {
@@ -63,10 +65,10 @@ class Landing extends React.Component {
         {
           this.state.title && !this.state.display
             ? <button
-                onClick={() => this.goRestourant()}
-              >
-                Перейти в ресторан
-              </button>
+              onClick={() => this.goRestourant()}
+            >
+              Перейти в ресторан
+            </button>
             : null
         }
       </div>
