@@ -4,20 +4,34 @@ import Order from './Order';
 import MenuAdmin from './MenuAdmin';
 import Burger from './Burger';
 import sampleBurgers from '../sample-burgers';
+import base from '../base';
 
 class App extends React.Component {
   state = {
     burgers: {},
     order: {},
   };
+  // ! 19 11-41 !!!!!!!!!!!!!!
+  componentDidMount() {
+    this.ref = base.syncState(`${11 - 41}`)
+  }
 
   addBurger = burger => {
     // 1. Делаем копию объекта state
     const burgers = { ...this.state.burgers };
     // 2. Добавляем новый бургер в переменную burgers
     burgers[`burger${Date.now()}`] = burger;
-    // 3. Записываем на новый объект burgers в state
+    // 3. Записываем наш новый объект burgers в state
     this.setState({ burgers });
+  }
+
+  addToOrder = key => {
+    // 1. Делаем копию объекта state
+    const order = { ...this.state.order };
+    // 2. Добавляем ключ к заказу со значением 1, либо обновить текущее значение
+    order[key] = order[key] + 1 || 1;
+    // 3. Записываем наш новый объект order в state
+    this.setState({ order });
   }
 
   loadSampleBurgers = () => {
@@ -37,13 +51,17 @@ class App extends React.Component {
                     key={key}
                     index={key}
                     details={this.state.burgers[key]}
+                    addToOrder={this.addToOrder}
                   />
                 )
               })
             }
           </ul>
         </div>
-        <Order />
+        <Order
+          burgers={this.state.burgers}
+          order={this.state.order}
+        />
         <MenuAdmin
           addBurger={this.addBurger}
           loadSampleBurgers={this.loadSampleBurgers}

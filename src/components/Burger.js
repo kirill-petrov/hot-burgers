@@ -1,8 +1,17 @@
 import React from 'react';
 
 class Burger extends React.Component {
+
   render() {
-    const { image, name, price, desc, status } = this.props.details;
+    const {
+      image,
+      name,
+      price,
+      desc,
+      status
+    } = this.props.details;
+    const { index, addToOrder } = this.props;
+    const isAvailable = status === 'available';
 
     return (
 
@@ -20,7 +29,13 @@ class Burger extends React.Component {
             <span className="price">{price} ₽</span>
           </h3>
           <p>{desc}</p>
-          <button className='buttonOrder'>Заказать</button>
+          <button
+            className='buttonOrder'
+            disabled={!isAvailable}
+            onClick={() => addToOrder(index)}
+          >
+            {isAvailable ? 'Заказать' : 'Отсутствует'}
+          </button>
         </div>
       </li>
     )
