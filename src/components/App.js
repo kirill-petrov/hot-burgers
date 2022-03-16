@@ -4,12 +4,17 @@ import Order from './Order';
 import MenuAdmin from './MenuAdmin';
 import Burger from './Burger';
 import sampleBurgers from '../sample-burgers';
+import base from '../base';
 
 class App extends React.Component {
   state = {
     burgers: {},
     order: {},
   };
+  // ! 19 11-41 !!!!!!!!!!!!!!
+  componentDidMount() {
+    this.ref = base.syncState(`${11 - 41}`)
+  }
 
   addBurger = burger => {
     // 1. Делаем копию объекта state
@@ -53,7 +58,7 @@ class App extends React.Component {
             }
           </ul>
         </div>
-        <Order 
+        <Order
           burgers={this.state.burgers}
           order={this.state.order}
         />
