@@ -1,4 +1,5 @@
 import React from 'react';
+import Shipment from './Shipment';
 
 class Order extends React.Component {
   renderOrder = key => {
@@ -48,7 +49,14 @@ class Order extends React.Component {
           }
         </ul>
 
-        
+        {
+          total > 0
+            ? <Shipment total={total} />
+            : <div className="nothingSelected">
+              Выберите бургер и добавьте к заказу
+            </div>
+        }
+
       </div >
     )
   }
