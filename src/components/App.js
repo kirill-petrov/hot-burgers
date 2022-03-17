@@ -11,9 +11,17 @@ class App extends React.Component {
     burgers: {},
     order: {},
   };
-  // ! 19 11-41 !!!!!!!!!!!!!!
+
   componentDidMount() {
-    this.ref = base.syncState(`${11 - 41}`)
+    const { params } = this.props.match;
+    this.ref = base.syncState(`${params.restourantId}/burgers`, {
+      context: this,
+      state: 'burgers'
+    });
+  }
+
+  componentWillUnmount() {
+    base.removeBinding(this.ref);
   }
 
   addBurger = burger => {
@@ -26,11 +34,8 @@ class App extends React.Component {
   }
 
   addToOrder = key => {
-    // 1. Делаем копию объекта state
     const order = { ...this.state.order };
-    // 2. Добавляем ключ к заказу со значением 1, либо обновить текущее значение
     order[key] = order[key] + 1 || 1;
-    // 3. Записываем наш новый объект order в state
     this.setState({ order });
   }
 
