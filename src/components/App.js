@@ -57,6 +57,12 @@ class App extends React.Component {
     this.setState({ order });
   }
 
+  updateBurger = (key, updatedBurger) => {
+    const burgers = { ...this.state.burgers };
+    burgers[key] = updatedBurger;
+    this.setState({ burgers });
+  }
+
   loadSampleBurgers = () => {
     this.setState({ burgers: sampleBurgers })
   }
@@ -88,6 +94,8 @@ class App extends React.Component {
         <MenuAdmin
           addBurger={this.addBurger}
           loadSampleBurgers={this.loadSampleBurgers}
+          burgers={this.state.burgers}
+          updatedBurger={this.updateBurger}
         />
       </div>
     )
