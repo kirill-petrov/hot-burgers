@@ -14,13 +14,15 @@ class MenuAdmin extends React.Component {
                 key={key}
                 index={key}
                 burger={this.props.burgers[key]}
-                updatedBurger={this.props.updatedBurger}
+                updateBurger={this.props.updateBurger}
               />
             )
           })
         }
         <AddBurgerForm addBurger={this.props.addBurger} />
-        <button onClick={this.props.loadSampleBurgers}>Загрузить бургеры</button>
+        <button onClick={this.props.loadSampleBurgers}>
+          Загрузить бургеры
+        </button>
       </div>
     )
   }

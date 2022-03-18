@@ -20,7 +20,6 @@ class App extends React.Component {
     if (localStorageRef) {
       this.setState({ order: JSON.parse(localStorageRef) })
     }
-    console.log(localStorageRef);
 
     this.ref = base.syncState(
       `${params.restourantId}/burgers`,
@@ -95,7 +94,7 @@ class App extends React.Component {
           addBurger={this.addBurger}
           loadSampleBurgers={this.loadSampleBurgers}
           burgers={this.state.burgers}
-          updatedBurger={this.updateBurger}
+          updateBurger={this.updateBurger}
         />
       </div>
     )
