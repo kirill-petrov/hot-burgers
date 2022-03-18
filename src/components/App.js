@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Header from './Header';
 import Order from './Order';
 import MenuAdmin from './MenuAdmin';
@@ -7,6 +8,10 @@ import sampleBurgers from '../sample-burgers';
 import base from '../base';
 
 class App extends React.Component {
+  static propTypes = {
+    match: PropTypes.object
+  }
+
   state = {
     burgers: {},
     order: {},
@@ -94,8 +99,8 @@ class App extends React.Component {
                   <Burger
                     key={key}
                     index={key}
-                    details={this.state.burgers[key]}
                     addToOrder={this.addToOrder}
+                    details={this.state.burgers[key]}
                   />
                 )
               })

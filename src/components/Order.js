@@ -19,12 +19,16 @@ class Order extends React.Component {
       key,
       timeout: { enter: 500, exit: 500 }
     };
+
     if (!burger) return null;
 
     if (!isAvailable) {
       return (
         <CSSTransition {...transitionOptions}>
-          <li className='unavailable' key={key}>
+          <li
+            className='unavailable'
+            key={key}
+          >
             Извините, {burger ? burger.name : 'бургер'} временно недоступен
           </li>
         </CSSTransition>
