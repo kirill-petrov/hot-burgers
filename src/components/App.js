@@ -16,7 +16,7 @@ class App extends React.Component {
     const { params } = this.props.match;
 
     const localStorageRef = localStorage.getItem(params.restourantId);
-    
+
     if (localStorageRef) {
       this.setState({ order: JSON.parse(localStorageRef) })
     }
@@ -35,8 +35,9 @@ class App extends React.Component {
     localStorage.setItem(
       params.restourantId,
       JSON.stringify(this.state.order)
-    )
+    );
   }
+
   componentWillUnmount() {
     base.removeBinding(this.ref);
   }
@@ -50,21 +51,36 @@ class App extends React.Component {
     this.setState({ burgers });
   }
 
-  addToOrder = key => {
-    const order = { ...this.state.order };
-    order[key] = order[key] + 1 || 1;
-    this.setState({ order });
-  }
-
   updateBurger = (key, updatedBurger) => {
     const burgers = { ...this.state.burgers };
     burgers[key] = updatedBurger;
     this.setState({ burgers });
   }
 
+  deleteBurger = key => {
+    const burgers = { ...this.state.burgers };
+    burgers[key] = null;
+    this.setState({ burgers });
+  }
+
   loadSampleBurgers = () => {
     this.setState({ burgers: sampleBurgers })
   }
+
+  addToOrder = key => {
+    const order = { ...this.state.order };
+    order[key] = order[key] + 1 || 1;
+    this.setState({ order });
+  }
+
+  deleteFromOrder = key => {
+    const order = { ...this.state.order };
+    delete order[key];
+    this.setState({ order });
+  }
+
+
+
 
   render() {
     return (
@@ -89,12 +105,14 @@ class App extends React.Component {
         <Order
           burgers={this.state.burgers}
           order={this.state.order}
+          deleteFromOrder={this.deleteFromOrder}
         />
         <MenuAdmin
           addBurger={this.addBurger}
           loadSampleBurgers={this.loadSampleBurgers}
           burgers={this.state.burgers}
           updateBurger={this.updateBurger}
+          deleteBurger={this.deleteBurger}
         />
       </div>
     )

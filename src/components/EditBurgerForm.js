@@ -2,8 +2,6 @@ import React from 'react';
 
 class EditBurgerForm extends React.Component {
   handleChange = event => {
-    // console.log(event.currentTarget);
-    // console.log(event.currentTarget.name);
     const updatedBurger = {
       ...this.props.burger,
       [event.currentTarget.name]: event.currentTarget.value,
@@ -60,6 +58,10 @@ class EditBurgerForm extends React.Component {
         // autoComplete='off'
         // ref={this.imageRef}
         />
+        <button
+          onClick={() => this.props.deleteBurger(this.props.index)}>
+          Удалить из меню
+        </button>
       </div>
     )
   }
