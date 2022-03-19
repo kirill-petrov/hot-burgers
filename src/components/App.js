@@ -1,12 +1,19 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import base from '../base';
+import firebase from 'firebase/app';
+import sampleBurgers from '../sample-burgers';
 import Header from './Header';
 import Order from './Order';
 import MenuAdmin from './MenuAdmin';
 import Burger from './Burger';
-import sampleBurgers from '../sample-burgers';
-import base from '../base';
+import SignIn from './Auth/SignIn';
 
 class App extends React.Component {
+  static propTypes = {
+    match: PropTypes.object
+  }
+
   state = {
     burgers: {},
     order: {},
@@ -16,11 +23,10 @@ class App extends React.Component {
     const { params } = this.props.match;
 
     const localStorageRef = localStorage.getItem(params.restourantId);
-    
+
     if (localStorageRef) {
       this.setState({ order: JSON.parse(localStorageRef) })
     }
-    console.log(localStorageRef);
 
     this.ref = base.syncState(
       `${params.restourantId}/burgers`,
@@ -36,8 +42,9 @@ class App extends React.Component {
     localStorage.setItem(
       params.restourantId,
       JSON.stringify(this.state.order)
-    )
+    );
   }
+
   componentWillUnmount() {
     base.removeBinding(this.ref);
   }
@@ -51,15 +58,15 @@ class App extends React.Component {
     this.setState({ burgers });
   }
 
-  addToOrder = key => {
-    const order = { ...this.state.order };
-    order[key] = order[key] + 1 || 1;
-    this.setState({ order });
-  }
-
   updateBurger = (key, updatedBurger) => {
     const burgers = { ...this.state.burgers };
     burgers[key] = updatedBurger;
+    this.setState({ burgers });
+  }
+
+  deleteBurger = key => {
+    const burgers = { ...this.state.burgers };
+    burgers[key] = null;
     this.setState({ burgers });
   }
 
@@ -67,37 +74,60 @@ class App extends React.Component {
     this.setState({ burgers: sampleBurgers })
   }
 
+  addToOrder = key => {
+    const order = { ...this.state.order };
+    order[key] = order[key] + 1 || 1;
+    this.setState({ order });
+  }
+
+  deleteFromOrder = key => {
+    const order = { ...this.state.order };
+    delete order[key];
+    this.setState({ order });
+  }
+
+  handleLogOut = async () => {
+    await firebase.auth().signOut();
+    window.location.reload();
+  }
+
+
   render() {
     return (
-      <div className="burger-paradise">
-        <div className="menu">
-          <Header title='Hot Burgers' />
-          <ul className='burgers'>
-            {
-              Object.keys(this.state.burgers).map(key => {
-                return (
-                  <Burger
-                    key={key}
-                    index={key}
-                    details={this.state.burgers[key]}
-                    addToOrder={this.addToOrder}
-                  />
-                )
-              })
-            }
-          </ul>
+      <SignIn>
+        <div className="burger-paradise">
+          <div className="menu">
+            <Header title='Hot Burgers' />
+            <ul className='burgers'>
+              {
+                Object.keys(this.state.burgers).map(key => {
+                  return (
+                    <Burger
+                      key={key}
+                      index={key}
+                      addToOrder={this.addToOrder}
+                      details={this.state.burgers[key]}
+                    />
+                  )
+                })
+              }
+            </ul>
+          </div>
+          <Order
+            burgers={this.state.burgers}
+            order={this.state.order}
+            deleteFromOrder={this.deleteFromOrder}
+          />
+          <MenuAdmin
+            addBurger={this.addBurger}
+            loadSampleBurgers={this.loadSampleBurgers}
+            burgers={this.state.burgers}
+            updateBurger={this.updateBurger}
+            deleteBurger={this.deleteBurger}
+            handleLogOut={this.handleLogOut}
+          />
         </div>
-        <Order
-          burgers={this.state.burgers}
-          order={this.state.order}
-        />
-        <MenuAdmin
-          addBurger={this.addBurger}
-          loadSampleBurgers={this.loadSampleBurgers}
-          burgers={this.state.burgers}
-          updatedBurger={this.updateBurger}
-        />
-      </div>
+      </SignIn>
     )
   }
 }
